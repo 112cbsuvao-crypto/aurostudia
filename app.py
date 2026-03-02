@@ -1,0 +1,116 @@
+from flask import Flask, render_template_string
+import os
+
+app = Flask(__name__)
+
+# HTML-шаблон сайта
+HTML_TEMPLATE = '''
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA STUDIO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: #0a0a0a; color: #fff; line-height: 1.6; }
+        header { background: #111; padding: 20px; position: fixed; width: 100%; top: 0; z-index: 100; }
+        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo { font-size: 24px; font-weight: bold; color: #00d4ff; }
+        nav a { color: #fff; text-decoration: none; margin-left: 20px; transition: 0.3s; }
+        nav a:hover { color: #00d4ff; }
+        section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 48px; margin-bottom: 20px; color: #00d4ff; }
+        h2 { font-size: 32px; margin-bottom: 30px; border-bottom: 2px solid #00d4ff; display: inline-block; }
+        .hero { text-align: center; padding: 150px 20px; }
+        .hero p { font-size: 20px; color: #aaa; max-width: 600px; margin: 0 auto; }
+        .card { background: #1a1a1a; padding: 30px; margin: 20px 0; border-radius: 10px; }
+        .card img { width: 100%; border-radius: 5px; margin-bottom: 20px; }
+        footer { background: #111; text-align: center; padding: 40px 20px; margin-top: 50px; }
+        footer p { color: #666; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">AURA</div>
+            <div>
+                <a href="#about">О студии</a>
+                <a href="#directions">Направления</a>
+                <a href="#contact">Контакты</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>AURA STUDIO</h1>
+        <p>Максимальный комфорт на минимальной площади. Технологичный дизайн для жизни в ритме мегаполиса.</p>
+    </section>
+
+    <section id="about">
+        <h2>Философия пространства</h2>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&h=600&fit=crop" alt="Интерьер">
+            <p>Студия AURA родилась из вызова современности: как жить комфортно в 25 квадратных метрах? Мы не просто делаем ремонт, мы создаем экосистему для жизни.</p>
+            <br>
+            <p>Наш подход основан на жестком минимализме и высоких технологиях. Мы убираем всё лишнее, оставляя только функциональную суть, и наполняем пространство умными решениями, которые работают на вас.</p>
+        </div>
+    </section>
+
+    <section id="directions">
+        <h2>Направления работы</h2>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?w=600&h=400&fit=crop" alt="Минимализм">
+            <h3>Радикальный минимализм</h3>
+            <p>Визуальное расширение пространства за счет чистых линий, монохромной палитры и отсутствия визуального шума.</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1558002038-1091a1661116?w=600&h=400&fit=crop" alt="Smart Home">
+            <h3>Smart Home & Tech</h3>
+            <p>Полная автоматизация: управление светом, климатом и безопасностью со смартфона. Скрытая проводка.</p>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=600&h=400&fit=crop" alt="Трансформация">
+            <h3>Пространственная трансформация</h3>
+            <p>Мебель-трансформеры и скрытые зоны. Кровать, уходящая в шкаф, и кухня, превращающаяся в рабочий стол.</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Контакты</h2>
+        <div class="card">
+            <p>© 2024 AURA Design Studio. Москва.</p>
+            <p>hello@aura-studio.ru | +7 (999) 000-00-00</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>AURA STUDIO — Все права защищены</p>
+    </footer>
+</body>
+</html>
+'''
+
+@app.route('/')
+def home():
+    return render_template_string(HTML_TEMPLATE)
+
+if __name__ == '__main__':
+    # Автоматическое определение порта для хостинга или локального запуска
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Проверка среды запуска
+    is_production = os.environ.get('FLASK_ENV') == 'production'
+    
+    print(f"🚀 Запуск AURA Studio...")
+    print(f"📍 Порт: {port}")
+    print(f"🌍 Режим: {'Production' if is_production else 'Development'}")
+    print(f"🔗 Локальный доступ: http://127.0.0.1:{port}")
+    
+    # host='0.0.0.0' разрешает подключения извне (нужно для хостинга)
+    # debug=False в режиме производства для безопасности
+    app.run(
+        host='0.0.0.0', 
+        port=port, 
+        debug=not is_production
+    )
